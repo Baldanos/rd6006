@@ -1,0 +1,2 @@
+pyserial==3.4
+minimalmodbus==1.0.2
