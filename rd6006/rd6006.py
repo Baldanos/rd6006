@@ -43,6 +43,7 @@ class RD6006:
         print(f"Firmware: {regs[3]/100}")
         print(f"Input   : {regs[14]/100}V")
         print(f"Temp    : {regs[5]}°C")
+        print(f"TempProb: {regs[35]}°C")
         print("== Output")
         print(f"Voltage : {regs[10]/100}V")
         print(f"Current : {regs[11]/1000}A")
@@ -53,6 +54,11 @@ class RD6006:
         print("== Protection")
         print(f"Voltage : {regs[82]/100}V")
         print(f"Current : {regs[83]/1000}A")
+        print("== Battery")
+        print(f"Capacity: {(regs[38] <<8 | regs[39])/1000}Ah")
+        print(f"Energy  : {(regs[40] <<8 | regs[41])/1000}Wh")
+        print(f"Battmode: {regs[32]}")
+
 
     @property
     def input_voltage(self):
@@ -61,9 +67,42 @@ class RD6006:
     @property
     def voltage(self):
         return self._read_register(8)/100
+
+    @property
+    def meastemp(self):
+        return self._read_register(35)
+
+    @property
+    def meastempf(self):
+        return self._read_register(37)
+
     @voltage.setter
     def voltage(self, value):
         self._write_register(8, int(value*100))
+
+    @property
+    def measvoltage(self):
+        return self._read_register(10)/100
+
+    @property
+    def meascurrent(self):
+        return self._read_register(11)/1000
+
+    @property
+    def measpower(self):
+        return self._read_register(13)/100
+
+    @property
+    def measah(self):
+        return (self._read_register(38) <<8 | self._read_register(39))/1000
+
+    @property
+    def measwh(self):
+        return (self._read_register(40) <<8 | self._read_register(41))/1000
+
+    @property
+    def battmode(self):
+        return self._read_register(32)
 
     @property
     def current(self):
