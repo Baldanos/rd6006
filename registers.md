@@ -3,12 +3,12 @@
 | Reg ID | Description |
 |--------|-------------|
 |   0 |  ID |
-|   1 |  |
-|   2 |  Serial number |
+|   1 |  Serial number high bytes |
+|   2 |  Serial number low bytes |
 |   3 |  Firmware version |
-|   4 |  |
+|   4 |  Temperature °c sign (0=+, 1=-) |
 |   5 |  Temperature °c |
-|   6 |  |
+|   6 |  Temperature F sign (0=+, 1=-) |
 |   7 |  Temperature F |
 |   8 |  Voltage set value |
 |   9 |  Current set value |
@@ -17,7 +17,7 @@
 |  12 |  AH display value |
 |  13 |  Power display value |
 |  14 |  Voltage input |
-|  15 |   |
+|  15 |  Keypad lock |
 |  16 |  Protection status (1=OVP, 2=OCP) |
 |  17 |  CV/CC (0=CV, 1=CC) |
 |  18 |  Output enable |
@@ -34,16 +34,16 @@
 |  29 |  |
 |  30 |  |
 |  31 |  |
-|  32 |  |
-|  33 |  |
-|  34 |  |
-|  35 |  |
-|  36 |  |
-|  37 |  |
-|  38 |  |
-|  39 |  |
-|  40 |  |
-|  41 |  |
+|  32 |  Battery mode active |
+|  33 |  Battery voltage |
+|  34 |  External temperature °c sign (0=+, 1=-) |
+|  35 |  External temperature °c |
+|  36 |  External temperature F sign (0=+, 1=-) |
+|  37 |  External temperature F |
+|  38 |  Ah high bytes |
+|  39 |  Ah low bytes |
+|  40 |  Wh high bytes |
+|  41 |  Wh low bytes |
 |  42 |  |
 |  43 |  |
 |  44 |  |
