@@ -196,7 +196,7 @@ class RD6006:
         self._write_register(51, h)
         self._write_register(52, m)
         self._write_register(53, s)
-        
+
 if __name__ == "__main__":
     import serial.tools.list_ports
     ports = list(serial.tools.list_ports.comports())
