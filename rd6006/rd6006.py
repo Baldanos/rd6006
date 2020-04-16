@@ -155,8 +155,7 @@ class RD6006:
     
     @property
     def ocpovp(self):
-        m = self._read_register(16)
-        return m
+        return self._read_register(16)
 
     @property
     def CVCC(self):
@@ -171,20 +170,23 @@ class RD6006:
 
     @property
     def date(self):
+        """returns the date as tuple: (year, month, day)"""
         regs = self._read_registers(48,3)
-        y = regs[0]
-        m = regs[1]
-        d = regs[2]
-        return(y,m,d)   
+        year = regs[0]
+        month = regs[1]
+        day = regs[2]
+        return(year, month, day)   
     @date.setter
     def date(self, value):
-        y, m, d = value
-        self._write_register(48, y)
-        self._write_register(49, m)
-        self._write_register(50, d)
+        """Sets the date, needs tuple with (year, month, day) as argument"""
+        year, month, day = value
+        self._write_register(48, year)
+        self._write_register(49, month)
+        self._write_register(50, day)
 
     @property
     def time(self):
+        """returns the time as tuple: (h, m, s)"""
         regs = self._read_registers(51, 3)
         h = regs[0]
         m = regs[1]
@@ -192,6 +194,7 @@ class RD6006:
         return(h, m, s)   
     @time.setter
     def time(self, value):
+        """sets the time, needs time with (h, m, s) as argument"""
         h, m, s = value
         self._write_register(51, h)
         self._write_register(52, m)
