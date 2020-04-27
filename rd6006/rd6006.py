@@ -86,12 +86,32 @@ class RD6006:
         return self._read_register(8)/100
 
     @property
-    def meastemp(self):
-        return self._read_register(35)
+    def meastemp_internal(self):
+        if self._read_register(4):
+            return -1 * self._read_register(5)
+        else:
+            return 1 * self._read_register(5)
+        
+    @property
+    def meastempf_internal(self):
+        if self._read_register(6):
+            return -1 * self._read_register(7)
+        else:
+            return 1 * self._read_register(7)
+        
+    @property
+    def meastemp_external(self):
+        if self._read_register(34):
+            return -1 * self._read_register(35)
+        else:
+            return 1 * self._read_register(35)
 
     @property
-    def meastempf(self):
-        return self._read_register(37)
+    def meastempf_external(self):
+        if self._read_register(36):
+            return -1 * self._read_register(37)
+        else:
+            return 1 * self._read_register(37)
 
     @voltage.setter
     def voltage(self, value):
