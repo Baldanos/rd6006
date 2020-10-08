@@ -7,9 +7,19 @@ class RD6006:
         self.address = address
         self.instrument = minimalmodbus.Instrument(port=port, slaveaddress=address)
         self.instrument.serial.baudrate=baudrate
-        regs = self._read_registers(2, 2)
-        self.sn = regs[0]
-        self.fw = regs[1]/100
+        regs = self._read_registers(0, 4)
+        self.sn = regs[1] << 16 | regs[2]
+        self.fw = regs[3] / 100
+        self.type = int(regs[0] / 10)
+
+        if self.type == 6012 or self.type == 6018:
+            print("RD6012 or RD6018 detected")
+            self.voltres = 100
+            self.ampres = 100
+        else:
+            print("RD6006 or other detected")
+            self.voltres = 100
+            self.ampres = 1000
 
     def __repr__(self):
         return f"RD6006 SN:{self.sn} FW:{self.fw}"
@@ -37,7 +47,7 @@ class RD6006:
     def _mem(self, M=0):
         """reads the 4 register of a Memory[0-9] and print on a single line"""
         regs = self._read_registers(M*4 + 80, 4)
-        print(f"M{M}: {regs[0]/100:4.1f}V, {regs[1]/1000:3.3f}A, OVP:{regs[2]/100:4.1f}V, OCP:{regs[3]/1000:3.3f}A")
+        print(f"M{M}: {regs[0] / self.voltres:4.1f}V, {regs[1] / self.ampres:3.3f}A, OVP:{regs[2] / self.voltres:4.1f}V, OCP:{regs[3] / self.ampres:3.3f}A")
 
     def status(self):
         regs = self._read_registers(0, 84)
@@ -45,7 +55,7 @@ class RD6006:
         print(f"Model   : {regs[0]/10}")
         print(f"SN      : {(regs[1]<<16 | regs[2]):08d}")
         print(f"Firmware: {regs[3]/100}")
-        print(f"Input   : {regs[14]/100}V")
+        print(f"Input   : {regs[14] / self.voltres}V")
         if regs[4]:
             sign = -1
         else:
@@ -57,20 +67,20 @@ class RD6006:
             sign = +1
         print(f"TempProb: {sign * regs[35]}°C")
         print("== Output")
-        print(f"Voltage : {regs[10]/100}V")
-        print(f"Current : {regs[11]/1000}A")
+        print(f"Voltage : {regs[10] / self.voltres}V")
+        print(f"Current : {regs[11] / self.ampres}A")
         print(f"Energy  : {regs[12]/1000}Ah")
         print(f"Power   : {regs[13]/100}W")
         print("== Settings")
-        print(f"Voltage : {regs[8]/100}V")
-        print(f"Current : {regs[9]/1000}A")
+        print(f"Voltage : {regs[8] / self.voltres}V")
+        print(f"Current : {regs[9] / self.ampres}A")
         print("== Protection")
-        print(f"Voltage : {regs[82]/100}V")
-        print(f"Current : {regs[83]/1000}A")
+        print(f"Voltage : {regs[82] / self.voltres}V")
+        print(f"Current : {regs[83] / self.ampres}A")
         print("== Battery")
         if regs[32]:
             print("Active")
-            print(f"Voltage : {regs[33]/100}V")
+            print(f"Voltage : {regs[33] / self.voltres}V")
         print(f"Capacity: {(regs[38] <<16 | regs[39])/1000}Ah")   # TODO check 8 or 16 bits?
         print(f"Energy  : {(regs[40] <<16 | regs[41])/1000}Wh")   # TODO check 8 or 16 bits?
         print("== Memories")
@@ -79,11 +89,11 @@ class RD6006:
 
     @property
     def input_voltage(self):
-        return self._read_register(14)/100
-
+        return self._read_register(14) / self.voltres
+        
     @property
     def voltage(self):
-        return self._read_register(8)/100
+        return self._read_register(8) / self.voltres
 
     @property
     def meastemp_internal(self):
@@ -115,15 +125,15 @@ class RD6006:
 
     @voltage.setter
     def voltage(self, value):
-        self._write_register(8, int(value*100))
+        self._write_register(8, int(value * self.voltres))
 
     @property
     def measvoltage(self):
-        return self._read_register(10)/100
+        return self._read_register(10) / self.voltres
 
     @property
     def meascurrent(self):
-        return self._read_register(11)/1000
+        return self._read_register(11) / self.ampres
 
     @property
     def measpower(self):
@@ -131,11 +141,11 @@ class RD6006:
 
     @property
     def measah(self):
-        return (self._read_register(38) <<16 | self._read_register(39))/1000   # TODO check 16 or 8 bit
+        return (self._read_register(38) << 16 | self._read_register(39))/1000   # TODO check 16 or 8 bit
 
     @property
     def measwh(self):
-        return (self._read_register(40) <<16 | self._read_register(41))/1000   # TODO check 16 or 8 bit
+        return (self._read_register(40) << 16 | self._read_register(41))/1000   # TODO check 16 or 8 bit
 
     @property
     def battmode(self):
@@ -147,24 +157,25 @@ class RD6006:
 
     @property
     def current(self):
-        return self._read_register(9)/1000
+        return self._read_register(9) / self.ampres
     @current.setter
     def current(self, value):
-        self._write_register(9, int(value*1000))
+        self._write_register(9, int(value * self.ampres))
 
     @property
     def voltage_protection(self):
-        return self._read_register(82)/100
+        return self._read_register(82) / self.voltres
+
     @voltage_protection.setter
     def voltage_protection(self, value):
-        self._write_register(82, int(value*100))
+        self._write_register(82, int(value * self.voltres))
 
     @property
     def current_protection(self):
-        return self._read_register(83)/1000
+        return self._read_register(83) / self.ampres
     @current_protection.setter
     def current_protection(self, value):
-        self._write_register(83, int(value*1000))
+        self._write_register(83, int(value * self.ampres))
 
     @property
     def enable(self):
