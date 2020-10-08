@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
     ports = list(serial.tools.list_ports.comports())
     for p in ports:
-        if "CH340" in p[1]:
+        if "VID:PID=1A86:7523" in p[2]:
             print(p)
             r = RD6006(p[0])
             break
