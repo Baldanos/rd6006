@@ -56,7 +56,7 @@
 |  51 | Hour |  |
 |  52 | Minute |  |
 |  53 | Second |  |
-|  54 |  |  |
+|  54 | Commit calibration registers to NVRAM | Calibration Data |
 |  55 | Output Voltage Zero | Calibration Data |
 |  56 | Output Voltage Scale | Calibration Data |
 |  57 | Back Voltage Zero | Calibration Data |
