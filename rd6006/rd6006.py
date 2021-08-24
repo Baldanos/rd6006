@@ -249,6 +249,22 @@ class RD6006:
         self._write_register(52, m)
         self._write_register(53, s)
 
+    @property
+    def read_timeout(self):
+        return self.instrument.serial.timeout
+
+    @read_timeout.setter
+    def read_timeout(self, value):
+        self.instrument.serial.timeout = value
+
+    @property
+    def write_timeout(self):
+        return self.instrument.serial.write_timeout
+
+    @write_timeout.setter
+    def write_timeout(self, value):
+        self.instrument.serial.write_timeout = value
+
 
 if __name__ == "__main__":
     import serial.tools.list_ports
