@@ -1,4 +1,4 @@
 from .rd6006 import *
+from ._version import __version__
 
 name = "rd6006"
-__version__ = 0.2
