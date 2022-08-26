@@ -14,8 +14,8 @@ class RD6006:
         self.fw = regs[3] / 100
         self.type = int(regs[0] / 10)
 
-        if self.type == 6012 or self.type == 6018:
-            print("RD6012 or RD6018 detected")
+        if self.type == 6012 or self.type == 6018 or self.type == 6024:
+            print("RD6012, RD6018 or RD6024 detected")
             self.voltres = 100
             self.ampres = 100
         else:
