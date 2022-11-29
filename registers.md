@@ -14,8 +14,8 @@
 |   9 |  Current set value |  |
 |  10 |  Voltage display value |  |
 |  11 |  Current display value |  |
-|  12 |  AH display value |  |
-|  13 |  Power display value |  |
+|  12 |  Power display value high bytes |  |
+|  13 |  Power display value low bytes |  |
 |  14 |  Voltage input |  |
 |  15 |  Keypad lock |  |
 |  16 |  Protection status (1=OVP, 2=OCP) |  |

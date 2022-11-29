@@ -145,7 +145,9 @@ class RD6006:
 
     @property
     def measpower(self):
-        return self._read_register(13) / 100
+        return (
+            self._read_register(12) << 16 | self._read_register(13)
+        ) / 100
 
     @property
     def measah(self):
