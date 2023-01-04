@@ -10,14 +10,15 @@
 
 import setuptools
 
-import rd6006
+with open("rd6006/_version.py", "r") as fh:
+    version = fh.readlines()[-1].split()[-1].strip("\"'")
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="rd6006",
-    version=rd6006.__version__,
+    version=version,
     author="Baldanos",
     author_email="balda@balda.ch",
     description="Python bindings for RD6006",
