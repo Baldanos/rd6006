@@ -1,0 +1,34 @@
+from rd6006 import RD6006
+import time
+
+class RD6006WPower(RD6006):
+    def set_power(self, power):
+        """
+        Set the output power by adjusting the current.
+        
+        Arguments:
+        power -- desired power output in watts
+        """
+        voltage = self.voltage
+        if voltage == 0: 
+            print("Voltage cannot be 0 when setting power.")
+            return
+        self.current = power / voltage
+
+    def set_power_continuous(self, power, delay=1):
+        """
+        Set the output power by adjusting the current, and keep adjusting it continuously.
+        
+        Arguments:
+        power -- desired power output in watts
+        delay -- delay in seconds between adjustments, default is 1
+        """
+        while True:
+            self.set_power(power)
+            time.sleep(delay)
+
+if __name__ == "__main__":
+    r = RD6006WPower('/dev/ttyUSB3')
+    r.voltage = 3.33  # Set your preferred voltage
+    r.enable = True   # Enable the output
+    r.set_power_continuous(15)  # 15 watts output power
