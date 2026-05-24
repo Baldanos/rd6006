@@ -1,14 +1,13 @@
 import minimalmodbus
 
-minimalmodbus.TIMEOUT = 0.5
-
-
 class RD6006:
     def __init__(self, port, address=1, baudrate=115200):
         self.port = port
         self.address = address
         self.instrument = minimalmodbus.Instrument(port=port, slaveaddress=address)
         self.instrument.serial.baudrate = baudrate
+        self.instrument.serial.timeout = 0.5
+        self.instrument.serial.write_timeout = 0.5
         regs = self._read_registers(0, 4)
         self.sn = regs[1] << 16 | regs[2]
         self.fw = regs[3] / 100

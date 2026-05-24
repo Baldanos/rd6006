@@ -25,7 +25,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Baldanos/rd6006",
     packages=setuptools.find_packages(),
-    install_requires=['pyserial', 'minimalmodbus'],
+    install_requires=['pyserial', 'minimalmodbus==2.1.1'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
